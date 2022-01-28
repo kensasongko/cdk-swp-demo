@@ -1,5 +1,5 @@
 {
-  "app": "npx ts-node --prefer-ts-exts bin/cdk-swap-demo.ts",
+  "app": "npx ts-node --prefer-ts-exts bin/cdk-swp-demo.ts",
   "watch": {
     "include": [
       "**"
@@ -26,6 +26,18 @@
     "@aws-cdk/core:target-partitions": [
       "aws",
       "aws-cn"
-    ]
+    ],
+
+    "vpcCdir": "10.20.0.0/16",
+    "keypairName": "dev",
+
+    "hostedZone": "letak.in",
+    "siteSubdomain": "coba00",
+    "apiSubdomain": "api00",
+
+    "apiContainerName": "api",
+
+    "staticSiteSubCondition": "repo:kensasongko/demo_s3:ref:refs/heads/main",
+    "apiEcrSubCondition": "repo:kensasongko/demo_ecs:ref:refs/heads/main"
   }
 }
