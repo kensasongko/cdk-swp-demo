@@ -17,6 +17,7 @@ export class ApiEcsDeployRoleStack extends Stack {
     super(scope, id, props);
 
     const { provider, imageAsset, service } = props;
+
     const subCondition = this.node.tryGetContext('apiEcrSubCondition');
 
     const principal = new iam.OpenIdConnectPrincipal(provider);

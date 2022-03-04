@@ -9,8 +9,15 @@ import { GithubOidcProviderStack } from '../lib/github-oidc-provider-stack';
 import { StaticSiteStack } from '../lib/static-site-stack';
 import { ApiEcrStack } from '../lib/api-ecr-stack';
 import { ApiEcsStack } from '../lib/api-ecs-stack';
-import { StaticSiteDeployRoleStack } from "../lib/static-site-deploy-role-stack"
-import { ApiEcsDeployRoleStack } from "../lib/api-ecs-deploy-role-stack"
+import { StaticSiteDeployRoleStack } from "../lib/static-site-deploy-role-stack";
+import { ApiEcsDeployRoleStack } from "../lib/api-ecs-deploy-role-stack";
+
+import { RdsStack } from "../lib/rds-stack";
+
+import { HelloLambdaStack } from "../lib/hello-lambda-stack";
+import { NodeLambdaStack } from "../lib/node-lambda-stack";
+import { UsersLambdaStack } from "../lib/users-lambda-stack";
+import { ApigatewayStack } from "../lib/apigateway-stack";
 
 const env = { account: process.env.CDK_DEFAULT_ACCOUNT, region: process.env.CDK_DEFAULT_REGION };
 
@@ -62,3 +69,25 @@ const apiEcsDeployRoleStack  = new ApiEcsDeployRoleStack(app, 'ApiEcsDeployRoleS
   service: apiEcsStack.service,
   env: env
 });
+
+const rdsStack = new RdsStack(app, 'RdsStack', {
+  vpc: vpcStack.vpc,
+  env: env
+});
+
+const helloLambdaStack = new HelloLambdaStack(app, 'HelloLambdaStack', { env: env, });
+const nodeLambdaStack = new NodeLambdaStack(app, 'NodeLambdaStack', { env: env, });
+const usersLambdaStack = new UsersLambdaStack(app, 'UsersLambdaStack', { 
+  vpc: vpcStack.vpc,
+  rdsAccessSg: rdsStack.accessSg,
+  rdsUserSecret: rdsStack.userSecret,
+  env: env, 
+});
+
+const apigatewayStack = new ApigatewayStack(app, 'ApigatewayStack', {
+  env: env,
+  helloLambda: helloLambdaStack.handler,
+  nodeLambda: nodeLambdaStack.handler,
+  usersLambda: usersLambdaStack.handler,
+});
+apigatewayStack.addDependency(helloLambdaStack);

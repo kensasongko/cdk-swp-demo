@@ -34,10 +34,13 @@
     "hostedZone": "letak.in",
     "siteSubdomain": "coba00",
     "apiSubdomain": "api00",
+    "apigatewaySubdomain": "api01",
 
     "apiContainerName": "api",
 
     "staticSiteSubCondition": "repo:kensasongko/demo_s3:ref:refs/heads/main",
-    "apiEcrSubCondition": "repo:kensasongko/demo_ecs:ref:refs/heads/main"
+    "apiEcrSubCondition": "repo:kensasongko/demo_ecs:ref:refs/heads/main",
+
+    "databaseName": "swap"
   }
 }
