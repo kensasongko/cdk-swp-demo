@@ -4,8 +4,10 @@ import { aws_ec2 as ec2 } from 'aws-cdk-lib';
 export class VpcStack extends Stack {
   public readonly vpc: ec2.Vpc;
 
-  constructor(scope: App, id: string, props?: StackProps) {
+  constructor(scope: App, id: string, props: StackProps) {
     super(scope, id, props);
+
+    const { env } = props;
 
     const vpcCdir = this.node.tryGetContext('vpcCdir');
 
@@ -30,6 +32,17 @@ export class VpcStack extends Stack {
           cidrMask: 22,
         },
       ],
+      gatewayEndpoints: {
+        S3: {
+          service: ec2.GatewayVpcEndpointAwsService.S3,
+        },
+      },
+    });
+
+    new ec2.InterfaceVpcEndpoint(this, 'SecretsManagerEndpoint', {
+      vpc: this.vpc,
+      service: new ec2.InterfaceVpcEndpointService('com.amazonaws.' + env?.region + '.secretsmanager', 443),
+      privateDnsEnabled: true,
     });
   }
 }

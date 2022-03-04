@@ -45,7 +45,8 @@ export class UsersLambdaStack extends Stack {
       // The other alternative is to use RDS Data API
       vpc: vpc,
       vpcSubnets: {
-        subnetType: ec2.SubnetType.PRIVATE_WITH_NAT,
+        //subnetType: ec2.SubnetType.PRIVATE_WITH_NAT,
+        subnetType: ec2.SubnetType.PRIVATE_ISOLATED,
       },
       securityGroups: [
         // Security group to access RDS, defined in RdsStack.
